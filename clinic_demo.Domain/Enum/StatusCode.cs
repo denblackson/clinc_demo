@@ -2,8 +2,8 @@
 {
     public enum StatusCode
     {
-        TaskAlreadyExists = 1,
-        TaskNotFound = 2,
+        AlreadyExists = 1,
+        NotFound = 2,
 
 
         Ok = 200,

@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\clinic_demo.DAL\clinic_demo.DAL.csproj" />
     <ProjectReference Include="..\clinic_demo.Domain\clinic_demo.Domain.csproj" />
   </ItemGroup>
 

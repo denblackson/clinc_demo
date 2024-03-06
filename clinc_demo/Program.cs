@@ -1,7 +1,37 @@
+using clinic_demo.BLL.Implementations;
+using clinic_demo.BLL.Interfaces;
+using clinic_demo.DAL;
+using clinic_demo.DAL.Interfaces;
+using clinic_demo.DAL.Repositiries;
+using clinic_demo.Domain.Entity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); //  .AddRazorRuntimeCompilation() nuget packages for auto html page update
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IBaseRepository<AppointmentEntity>, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
+
+
+
+var connectionString = builder.Configuration.GetConnectionString("DENIS_MSSQL");
+
+builder.Services.AddDbContext<AppDbContext>(options=>
+{
+    options.UseSqlServer(connectionString);
+});
+
+
+
+
+
+
 
 var app = builder.Build();
 

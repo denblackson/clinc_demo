@@ -1,16 +1,15 @@
-using clinc_demo.Models;
+using clinic_demo.BLL.Interfaces;
+using clinic_demo.Domain.DTO.Appointment;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace clinc_demo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IAppointmentService _appointmentService;
+        public HomeController(IAppointmentService appointmentService)
         {
-            _logger = logger;
+            _appointmentService = appointmentService;
         }
 
         public IActionResult Index()
@@ -18,15 +17,20 @@ namespace clinc_demo.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateAppointmentDTO model)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var response = await _appointmentService.Create(model);
+            if (response.StatusCode == clinic_demo.Domain.Enum.StatusCode.Ok)
+            {
+                return Ok(new { description = response.Description });
+            }
+            return BadRequest(new { description = response.Description });
         }
     }
+
+
+
 }
+
