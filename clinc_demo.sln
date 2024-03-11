@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinc_demo", "clinc_demo\clinc_demo.csproj", "{B3F811C2-4D6F-4B06-BBCC-F91B3E8EF64B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clinc_demo", "clinc_demo\clinc_demo.csproj", "{B3F811C2-4D6F-4B06-BBCC-F91B3E8EF64B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinic_demo.Domain", "clinic_demo.Domain\clinic_demo.Domain.csproj", "{48980198-527F-47F4-9FBE-1F2B683325A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clinic_demo.Domain", "clinic_demo.Domain\clinic_demo.Domain.csproj", "{48980198-527F-47F4-9FBE-1F2B683325A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinic_demo.BLL", "clinic_demo.BLL\clinic_demo.BLL.csproj", "{520F6C57-C26F-403A-8CD0-0BD37A11E083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clinic_demo.BLL", "clinic_demo.BLL\clinic_demo.BLL.csproj", "{520F6C57-C26F-403A-8CD0-0BD37A11E083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinic_demo.DAL", "clinic_demo.DAL\clinic_demo.DAL.csproj", "{4D4AA032-E821-4498-AA41-03ABCFC6EB34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clinic_demo.DAL", "clinic_demo.DAL\clinic_demo.DAL.csproj", "{4D4AA032-E821-4498-AA41-03ABCFC6EB34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinic_demo.DALTests", "clinic_demo.DALTests\clinic_demo.DALTests.csproj", "{C4A00847-6E97-45C2-8716-25978FAF2DD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clinic_demo.BLLTests", "clinic_demo.BLLTests\clinic_demo.BLLTests.csproj", "{E6B46D48-6779-461A-831E-81653DDE8884}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{4D4AA032-E821-4498-AA41-03ABCFC6EB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D4AA032-E821-4498-AA41-03ABCFC6EB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D4AA032-E821-4498-AA41-03ABCFC6EB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4A00847-6E97-45C2-8716-25978FAF2DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4A00847-6E97-45C2-8716-25978FAF2DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4A00847-6E97-45C2-8716-25978FAF2DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4A00847-6E97-45C2-8716-25978FAF2DD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B46D48-6779-461A-831E-81653DDE8884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B46D48-6779-461A-831E-81653DDE8884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B46D48-6779-461A-831E-81653DDE8884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B46D48-6779-461A-831E-81653DDE8884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
