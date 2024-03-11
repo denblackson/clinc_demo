@@ -16,6 +16,8 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); //  .Ad
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IBaseRepository<AppointmentEntity>, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IBaseRepository<DoctorEntity>, DoctorRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 
 
@@ -52,6 +54,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Appointment}/{action=Index}/{id?}");
 
 app.Run();

@@ -30,7 +30,7 @@ namespace clinic_demo.BLL.Implementations
             {
                 model.Validate();
 
-                _logger.LogInformation($"Appointment id = {model.AppointmentId}    creation query");
+                _logger.LogInformation($"Appointment  creation query");
 
 
 
@@ -50,7 +50,7 @@ namespace clinic_demo.BLL.Implementations
 
                 appointment = new AppointmentEntity()
                 {
-                    AppointmentEntityId = model.AppointmentId,
+                   // AppointmentEntityId = model.AppointmentId,
                     PatientId = model.PatientId,
                     DoctorId = model.DoctorId,
                     Date = model.Date,
@@ -63,7 +63,7 @@ namespace clinic_demo.BLL.Implementations
                 return new BaseResponce<AppointmentEntity>()
                 {
                     StatusCode = StatusCode.Ok,
-                    Description = "Task created successfully"
+                    Description = "Appointment created successfully"
                 };
 
 
@@ -83,19 +83,33 @@ namespace clinic_demo.BLL.Implementations
         {
             try
             {
+                //var appointments = await _appointmentRepository.GetAll()
+                //    .Where(x => x.Status != AppointmentStatus.Completed)
+                //    .Where(x => x.Date == filter.AppointmentDate)
+                //    .Select(x => new AppointmentDTO()
+                //    {
+                //        DoctorId = x.DoctorId,
+                //        PatientId = x.PatientId,
+                //        Date = x.Date,
+                //        Description = x.Description,
+                //        Status = x.Status.ToString()
+                //    })
+                //    .ToListAsync();
+
+
                 var appointments = await _appointmentRepository.GetAll()
-                    .Where(x => x.Status != AppointmentStatus.Completed)
-                    .Where(x => x.Date == filter.AppointmentDate)
                     .Select(x => new AppointmentDTO()
                     {
-                        DoctorId = x.DoctorId,
-                        PatientId = x.PatientId,
+                       // AppointmentId = x.AppointmentEntityId,
+                       // DoctorId = x.DoctorId,
+                       // PatientId = x.PatientId,
+                        DoctorName = $"{x.Doctor.FirstName} {x.Doctor.LastName}", 
+                        PatientName = $"{x.Patient.FirstName} {x.Patient.LastName}",
                         Date = x.Date,
                         Description = x.Description,
                         Status = x.Status.ToString()
                     })
                     .ToListAsync();
-
 
                 return new BaseResponce<IEnumerable<AppointmentDTO>>()
                 {
@@ -150,9 +164,40 @@ namespace clinic_demo.BLL.Implementations
             }
         }
 
-        public async Task<IBaseResponce<bool>> EndTask(long id)
+        public async Task<IBaseResponce<bool>> EndAppointment(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appointment = await _appointmentRepository.GetAll().FirstOrDefaultAsync(x => x.AppointmentEntityId == id);
+                if (appointment == null)
+                {
+                    return new BaseResponce<bool>()
+                    {
+                        StatusCode = StatusCode.NotFound,
+                        Description = "Appointment not found"
+                    };
+                }
+
+                appointment.Status= AppointmentStatus.Completed;
+
+                await _appointmentRepository.Update(appointment);
+
+                return new BaseResponce<bool>()
+                {
+                    StatusCode = StatusCode.Ok,
+                    Description = "Appointment is marked as done"
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"[AppointmentService.EndAppointment]: {e.Message}");
+
+                return new BaseResponce<bool>()
+                {
+                    Description = $"{e.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
         }
 
     }

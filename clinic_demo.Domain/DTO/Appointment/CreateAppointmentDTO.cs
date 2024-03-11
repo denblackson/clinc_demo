@@ -24,20 +24,7 @@ namespace clinic_demo.Domain.DTO.Appointment
 
             Validator.TryValidateObject(this, context, results, true);
 
-            if (AppointmentId< 0)
-            {
-                throw new Exception("AppointmentEntityId must be greater than or equal to zero.");
-            }
-
-            if (PatientId < 0)
-            {
-                throw new Exception("PatientEntityId must be greater than or equal to zero.");
-            }
-
-            if (DoctorId < 0)
-            {
-                throw new Exception("PatientEntityId must be greater than or equal to zero.");
-            }
+         
 
             if (Date < DateTime.Today) // ????????????????????????
             {

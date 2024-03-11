@@ -11,6 +11,6 @@ namespace clinic_demo.BLL.Interfaces
         Task<IBaseResponce<AppointmentEntity>> Create(CreateAppointmentDTO model);
         Task<IBaseResponce<IEnumerable<AppointmentDTO>>> GetAllAppointments(AppointmentFilter filter);
         Task<IBaseResponce<bool>> ChangeStatus(int id, AppointmentStatus newStatus);
-        Task<IBaseResponce<bool>> EndTask(long id); //TODO: remove?????
+        Task<IBaseResponce<bool>> EndAppointment(long id); //TODO: remove?????
     }
 }

@@ -1,0 +1,259 @@
+﻿@using clinic_demo.Domain.DTO
+@using clinic_demo.Domain.Enum
+@{
+    ViewData["Title"] = "AppointmentWorkPAge";
+}
+
+
+<h4 class="md-3 text-muted"></h4>
+<form id="createAppointmentForm">
+    <div class="mb-3">
+        <label class="form-lable">Ім'я пацієнта</label>
+        <input name="PatientName" type="text" class="form-control" />
+        <label class="form-lable">Прізвище пацієнта</label>
+        <input name="PatientLastNAme" type="text" class="form-control" />
+
+        <label name="doctor">Вибір лікаря</label>
+        <select id="doctorSelect">
+            <option value="">Виберіть лікаря</option>
+            <option value="1">Чорний Денис</option>
+            <option value="2">Лікар 2</option>
+            <option value="3">Лікар 3</option>
+        </select>
+       
+        <label name="doctor">Вибір пацієнта</label>
+        <select id="patientSelect">
+            <option value="">Виберіть Пацієнта</option>
+            <option value="1">Хозін Назар</option>
+            <option value="2">Ім'я Лікаря 2</option>
+            <option value="3">Ім'я Лікаря 3</option>
+        </select>
+
+        <div>
+          КАЛЕНДАР
+        </div>
+        
+        
+        
+
+    </div>
+
+
+            <div class="mb-3">
+                <label class="form-lable">Деталі прийому</label>
+                <textarea name="description" type="text" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button id="createAppointment" class="btn btn-primary">Створити призначення</button>
+        </form>
+
+        <br />
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Пошук по Прізвищу</label>
+                <input name="nameTask" type="text" class="form-control" />
+
+
+            </div>
+            <div class="form-group col-md-6">
+                <label class="col-form-label">Priority</label>
+                <select id="prioritySearch" class="form-control md-3" asp-items="Html.GetEnumSelectList<AppointmentStatus>()"></select>
+            </div>
+        </div>
+        <br />
+
+        <table class="table table-dark table-hover" id="AppointmentTableId">
+            <thead>
+                <tr>
+                    @* <th>Номер прийому</th> *@
+                    <th>Пацієнт</th>
+                    <th>Лікарь</th>
+                    <th>Запис на</th>
+                    <th>Статус</th>
+                    <th>Опис</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+
+
+                                @section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("DoctorListHandler")',
+                        method: 'POST',
+                        success: function (response) {
+                            var doctors = response.data;
+                            var select = $('#doctorSelect');
+
+                            doctors.forEach(function (doctor) {
+                                var fullName = doctor.FirstName + ' ' + doctor.LastName;
+                                select.append('<option value="' + doctor.DoctorId + '">' + fullName + '</option>');
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error fetching doctors:', error);
+                        }
+                    });
+                });
+
+
+
+
+
+
+
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+
+
+
+                // TABLE INITIALIZATION
+                let dataTable = $('#AppointmentTableId').DataTable(
+                    {
+                        info: true,
+                        serverSide: true, // sorting on server side
+                        searching: false,
+                        paging: false,
+                        sorting: false,
+
+                        ajax: {
+                            url: "@Url.Action("AppointmentHandler")",
+                            method: 'POST',
+                            data: model
+                        },
+                        columns: [
+                            // { data: 'appointmentId' },
+                            { data: 'patientName' },
+                            { data: 'doctorName' },
+                            { data: 'date' },
+                            { data: 'status' },
+                            { data: 'description' },
+                            {
+                                data: null,
+                                sortable: false,
+                                render: function (data, type) {
+                                    return '<button class = "btn btn-success btn-sm center-block">Mark as done</button>'
+                                }
+                            }
+                        ],
+                        createdRow: function (nRow, data) {
+
+                            var hendlerComplete = function () {
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Are you sure?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, mark it as done!',
+                                    cancelButtonText: 'No, cancel!',
+                                    reverseButtons: true
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '@Url.Action("EndAppointment")',
+                                            data: { id: data.id },
+                                            success: function (response) {
+                                                Swal.fire({
+                                                    title: 'Info',
+                                                    text: response.description,
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                })
+                                                dataTable.draw();
+                                            },
+                                            error: function (response) {
+                                                Swal.fire({
+                                                    title: 'Info',
+                                                    text: response.responseJSON.description,
+                                                    icon: 'error',
+                                                    confirmButtonText: 'OK'
+                                                })
+                                            }
+
+                                        })
+                                    }
+                                })
+                            }
+
+
+
+                            for (var i = 0; i < dataTable.columns().header().length - 1; i++) {
+                                $('td', nRow).eq(i).css('cursor', 'pointer');
+
+                                $('td', nRow).eq(i).on('click', null);
+                            }
+                            $('td button', nRow).on('click', hendlerComplete);
+                        }
+
+
+                    });
+
+
+                function model() {
+                    return {
+                        Name: $('input[name="nameAppointment"]').val(),
+                        Priority: $('#prioritySearch option:selected').val(),
+                    }
+                }
+
+
+
+                $('input[name="nameAppointment"]').on('change', function () {
+                    dataTable.draw();
+                })
+
+                $('#prioritySearch').on('change', function () {
+                    dataTable.draw();
+                })
+
+
+
+
+
+                // MODAL ICON
+        $('#createAppointment').on('click', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Create", "Appointment")',
+                data: $('#createAppointmentForm').serialize(),
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Info',
+                                text: response.description,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            })
+                        },
+                        error: function (response) {
+                            Swal.fire({
+                                title: 'Info',
+                                text: response.responseJSON.description,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            })
+                        }
+
+                    })
+                });
+
+
+
+            </script>
+                                }
